@@ -1,2 +1,2 @@
 # zhihu
-zhihu spide
+zhihu spider
