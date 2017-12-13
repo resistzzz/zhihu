@@ -25,7 +25,7 @@ class zhihu(object):
         s = requests.session()
         html_xsrf = s.get('https://www.zhihu.com/', headers=headers)
         html_xsrf.raise_for_status()
-        print(html_xsrf.status_code)
+        #print(html_xsrf.status_code)
         html_xsrf.encoding = html_xsrf.apparent_encoding
 
         soup_xsrf = BeautifulSoup(html_xsrf.text, "html.parser")
