@@ -229,4 +229,3 @@ class AnsPage(object):
 if __name__ == '__main__':
     zhihu = zhihuSpider()
     zhihu.runSpider()
-    print(len(zhihu.QueUrl))
