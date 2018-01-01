@@ -4,8 +4,8 @@ from bs4 import BeautifulSoup
 import sys
 import re
 
-class zhihuSpider(object, account, password):
-    def __init__(self):
+class zhihuSpider(object):
+    def __init__(self, account, password):
         self.driver = webdriver.Firefox()
         self.homePageUrl = 'https://www.zhihu.com/'
         self.topic = '游戏'
