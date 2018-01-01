@@ -12,7 +12,7 @@ class zhihuSpider(object):
         self.topicUrl = 'https://www.zhihu.com/topic#' + self.topic
         self.account = '18287108118'
         self.password = 'zzz970504'
-        self.times = 20
+        self.times = 0
         self.QueTitle = []
         self.QueFirstAns = []
         self.QueUrl = []
@@ -109,11 +109,12 @@ class zhihuSpider(object):
         with open(fpath, 'w', encoding='utf-8') as f:
             f.write('问题 ' + str(i+1) + '\n')
             f.write('问题标题:' + '\t' + str(self.QueTitle[i]) + '\n')
+            f.write('关注者:' + '\t' + str(infoDic['noticerNum'] + '\t' + '被浏览:' + '\t' + str(infoDic['lookNum']) + '\n'))
             f.write('问题描述:' + '\t' + str(infoDic['queDis']) + '\n\n')
             for j in range(len(infoDic['ansAuthor'])):
                 try:
                     f.write('回答者' + str(j+1) + ':' + '\t' + str(infoDic['ansAuthor'][j]) + '\n')
-                    f.write('点赞数:' + '\t' + str(infoDic['ansPraise'][j]) + '\n')
+                    f.write('点赞数:' + '\t\t' + str(infoDic['ansPraise'][j]) + '\n')
                     f.write('回答内容:' + '\t' + str(infoDic['ansText'][j]) + '\n\n')
                 except:
                     continue
@@ -138,6 +139,8 @@ class AnsPage(object):
         self.html = html
         self.soup = BeautifulSoup(self.html, 'html.parser')
         self.queDis = ''
+        self.noticerNum = ''
+        self.lookNum = ''
         self.ansAuthor = []
         self.ansPraise = []
         self.ansText = []
@@ -150,15 +153,29 @@ class AnsPage(object):
 
     def _getQueDiscribe(self):
         try:
+            queDis = ''
             queDisTag = self.soup.find('span', attrs={'class': 'RichText', 'itemprop': 'text'})
             if queDisTag.get('class') == ['RichText']:
-                queDis = queDisTag.string
+                for i in queDisTag.strings:
+                    queDis = queDis + i
             else:
                 queDis = None
             return queDis
         except:
             print('get question discription failed!')
             return None
+
+    def _getNoticerAndLookNum(self):
+        num = []
+        try:
+            Tag = self.soup.find_all('strong', attrs={'class': 'NumberBoard-itemValue'})
+            for elem in Tag:
+                num.append(elem.get('title'))
+            return num
+        except:
+            num.append(None)
+            num.append(None)
+            return num
 
     def _getAnswerer(self):
         try:
@@ -214,12 +231,17 @@ class AnsPage(object):
             return None
 
     def getAnsInfoDic(self):
+        num = self._getNoticerAndLookNum()
         self.queDis = self._getQueDiscribe()
+        self.noticerNum = num[0]
+        self.lookNum = num[1]
         self.ansAuthor = self._getAnswerer()
         self.ansPraise = self._getAnsPraise()
         self.ansText = self._getAnsText()
         self.ansInfoDic = {
             'queDis': self.queDis,
+            'noticerNum': self.noticerNum,
+            'lookNum': self.lookNum,
             'ansAuthor': self.ansAuthor,
             'ansPraise': self.ansPraise,
             'ansText': self.ansText
@@ -229,3 +251,4 @@ class AnsPage(object):
 if __name__ == '__main__':
     zhihu = zhihuSpider()
     zhihu.runSpider()
+    print(len(zhihu.QueUrl))
