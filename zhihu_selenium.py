@@ -5,13 +5,14 @@ import sys
 import re
 
 class zhihuSpider(object):
-    def __init__(self, account, password):
+    def __init__(self):
         self.driver = webdriver.Firefox()
         self.homePageUrl = 'https://www.zhihu.com/'
-        self.topic = '游戏'
-        self.topicUrl = 'https://www.zhihu.com/topic#' + self.topic
-        self.account = account
-        self.password = password
+        self.topic = 'JAVA'
+        self.startUrl = 'https://www.zhihu.com/search?q=' + self.topic + '&type=topic'
+        self.topicUrl = ''
+        self.account = '18287108118'
+        self.password = 'zzz970504'
         self.times = 0
         self.QueTitle = []
         self.QueFirstAns = []
@@ -34,6 +35,24 @@ class zhihuSpider(object):
             time.sleep(1)
         except:
             print('login error!:(')
+            sys.exit(-1)
+
+    def _getTopicPage(self, url=None):
+        try:
+            self.driver.get(url)
+            return self.driver.page_source
+        except:
+            print('get topic failed!:(')
+            sys.exit(-1)
+
+    def _getTopicUrl(self, html=None):
+        try:
+            soup = BeautifulSoup(html, 'html.parser')
+            tag = soup.find('a', attrs={'class': 'TopicLink', 'target': '_blank'})
+            url = 'https://www.zhihu.com' + tag.get('href')
+            return url
+        except:
+            print('没有这个话题!请重新输入话题，启动爬虫!')
             sys.exit(-1)
 
     def _getTopicHtml(self, url=None):
@@ -80,8 +99,10 @@ class zhihuSpider(object):
                     continue
 
     def getQuestion(self):
-        html = self._getTopicHtml(self.topicUrl)
-        self._getQuestionInfo(html)
+        topichtml = self._getTopicPage(self.startUrl)
+        self.topicUrl = self._getTopicUrl(topichtml)
+        quehtml = self._getTopicHtml(self.topicUrl)
+        self._getQuestionInfo(quehtml)
         self._saveQuestion()
 
     def _getAnswerHtml(self, url=None):
@@ -251,8 +272,6 @@ class AnsPage(object):
 
 
 if __name__ == '__main__':
-    account = '18287108118'
-    password = 'zzz970504'
-    zhihu = zhihuSpider(account, password)
+    zhihu = zhihuSpider()
     zhihu.runSpider()
     print(len(zhihu.QueUrl))
