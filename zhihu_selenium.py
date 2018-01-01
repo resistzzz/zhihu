@@ -251,6 +251,8 @@ class AnsPage(object):
 
 
 if __name__ == '__main__':
-    zhihu = zhihuSpider()
+    account = '18287108118'
+    password = 'zzz970504'
+    zhihu = zhihuSpider(account, password)
     zhihu.runSpider()
     print(len(zhihu.QueUrl))
