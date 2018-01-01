@@ -149,6 +149,10 @@ class zhihuSpider(object):
             self._saveAns(ansInfoDic, index)
             index = index + 1
 
+    def stopSpider(self):
+        print('Spider end!')
+        sys.exit(-1)
+
     def runSpider(self):
         self.login()
         self.getQuestion()
