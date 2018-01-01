@@ -4,14 +4,14 @@ from bs4 import BeautifulSoup
 import sys
 import re
 
-class zhihuSpider(object):
+class zhihuSpider(object, account, password):
     def __init__(self):
         self.driver = webdriver.Firefox()
         self.homePageUrl = 'https://www.zhihu.com/'
         self.topic = '游戏'
         self.topicUrl = 'https://www.zhihu.com/topic#' + self.topic
-        self.account = '18287108118'
-        self.password = 'zzz970504'
+        self.account = account
+        self.password = password
         self.times = 0
         self.QueTitle = []
         self.QueFirstAns = []
