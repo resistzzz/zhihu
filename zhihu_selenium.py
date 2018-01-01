@@ -146,6 +146,8 @@ class AnsPage(object):
         self.ansText = []
         self.ansInfoDic = {
             'queDis': self.queDis,
+            'noticerNum': self.noticerNum,
+            'lookNum': self.lookNum,
             'ansAuthor': self.ansAuthor,
             'ansPraise': self.ansPraise,
             'ansText': self.ansText
