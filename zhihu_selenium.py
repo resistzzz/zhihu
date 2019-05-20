@@ -11,8 +11,8 @@ class zhihuSpider(object):
         self.topic = 'JAVA'
         self.startUrl = 'https://www.zhihu.com/search?q=' + self.topic + '&type=topic'
         self.topicUrl = ''
-        self.account = '18287108118'
-        self.password = 'zzz970504'
+        self.account = 'xxx'
+        self.password = 'xxx'
         self.times = 0
         self.QueTitle = []
         self.QueFirstAns = []
